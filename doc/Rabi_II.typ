@@ -39,7 +39,7 @@
 
 = SVD分解和C矩阵的关系
 
-
+== C矩阵到SVD分解
 
 一个系综矩阵 $A_(N times M),(M>N)$，定义关联矩阵 $C_(M times M)=A^T_(M times N) A_(N times M)$，求得 $C$ 矩阵的特征值$lambda_i$和对应标准正交的特征向量
 
@@ -81,6 +81,35 @@ $
 即 $A = U Sigma V^T$，这就是SVD分解。
 
 特征值$lambda_i$和$sigma_i$的关系是 $lambda_i = sigma_i^2$。
+
+== SVD分解到C矩阵
+
+根据SVD分解，有 $A = U Sigma V^T$
+
+$
+C = A^T A = V Sigma^T U^T U Sigma V^T = V Sigma^2 V^T\
+=> C V = V Sigma^2
+$
+
+对于 $Sigma^2$ 矩阵对角线上的每一项有本征方程
+
+$
+C v_i = lambda_i v_i= sigma_i^2 v_i
+$
+
+== SVD分解到K矩阵
+
+对于 $K = A A^T$ 矩阵，有
+
+$
+K = U Sigma V^T V Sigma^T U^T = U Sigma Sigma^T U^T = U Lambda U^T
+$
+
+对于 $Lambda$ 矩阵对角线上的每一项有本征方程
+
+$
+K u_i = lambda_i u_i= sigma_i^2 u_i
+$
 
 #pagebreak()
 
@@ -146,7 +175,7 @@ $<quantum_incidence_matrix>
 $
 E = U Sigma &= A V \
 => E_k &= sum_(tau=0)^M V_(tau k) bold(s)_tau = sum_(tau=0)^M V_(tau k) sum_(i=0)^N a_(tau i) ket(psi_i^B)
-$
+$<eigen_state_of_quantum_system>
 
 
 
@@ -224,22 +253,22 @@ $
 
 $
 lambda_(plus.minus) = plus.minus 1\
-psi_(plus.minus) = 1/sqrt(2) mat(1; plus.minus 1)= 1/sqrt(2) (ket(arrow.t)  plus.minus ket(arrow.b))
+psi_(plus.minus) = 1/sqrt(2) mat(1; plus.minus 1)= 1/sqrt(2) (ket(+)  plus.minus ket(-))
 $
 
 显然基态(环境)的本征值和本征波函数对应为
 
 $
 lambda_-=-1\
-psi_- = 1/sqrt(2) mat(1; -1)= 1/sqrt(2) (ket(arrow.t)  - ket(arrow.b))
+psi_- = 1/sqrt(2) mat(1; -1)= 1/sqrt(2) (ket(+)  - ket(-))
 $
 
 基态的波函数可以写为
 
 $
-ket(G) &=sum_tau sum_i a_(tau i) ket(psi_tau^A)  ket(psi_i^B)= sum_i (a_(arrow.b i)ket(arrow.b) ket(psi_i^B) + a_(arrow.t i)ket(arrow.t) ket(psi_i^B))\
-&= psi(0) (a_(arrow.b 0)ket(arrow.b) + a_(arrow.t 0)ket(arrow.t))\
-&= psi(0) (-1/sqrt(2) ket(arrow.b) + 1/sqrt(2)ket(arrow.t))\
+ket(G) &=sum_tau sum_i a_(tau i) ket(psi_tau^A)  ket(psi_i^B)= sum_i (a_(- i)ket(-) ket(psi_i^B) + a_(+ i)ket(+) ket(psi_i^B))\
+&= psi(0) (a_(- 0)ket(-) + a_(+ 0)ket(+))\
+&= psi(0) (-1/sqrt(2) ket(-) + 1/sqrt(2)ket(+))\
 &= psi(0)/sqrt(2) mat(1; -1)
 $
 
@@ -254,14 +283,15 @@ $
 写成矩阵形式为
 
 $
-C^Q &= mat(a_(arrow.b 0)^2, a_(arrow.b 0) a_(arrow.t 0); a_(arrow.t 0) a_(arrow.b 0), a_(arrow.t 0)^2)\
+C^Q &= mat(a_(- 0)^2, a_(- 0) a_(+ 0); a_(+ 0) a_(- 0), a_(+ 0)^2)\
 &= 1/2 mat(1, -1; -1, 1)
 $
 
-对应的量子本征微观态为
+对应的量子本征态为
 
 $
-ket(plus.minus)_x = 1/sqrt(2) mat(1; plus.minus 1)
+ket(plus.minus)_x &= 1/sqrt(2) mat(1; plus.minus 1)\
+=>V &=  1/sqrt(2) mat(1,1;1,-1)=mat(v_+,v_-)
 $
 
 与相应的本征值
@@ -269,6 +299,17 @@ $
 $
 lambda_- = 1, lambda_+ = 0
 $
+
+
+可能的量子本征微观态为
+$
+E_k &= sum_(tau=0)^M V_(tau k) sum_(i=0)^N a_(tau i) ket(psi_i^B)\
+&= sum_(tau=0)^M V_(tau k)  a_(tau 0)  psi(0)\
+&= psi(0)  (V_(- k)  a_(- 0)+ V_(+ k)  a_(+ 0))\
+&= psi(0)  ( V_(+ k)-V_(- k) )/sqrt(2)\
+=> E_(plus.minus) &= psi(0)  ( V_(+ plus.minus)-V_(- plus.minus) )/sqrt(2)= psi(0)  ( 1 minus.plus 1 )/sqrt(2)
+$
+
 
 当 $R > 1$ 时，哈密顿量写为
 
@@ -290,17 +331,117 @@ $
 考虑基态对应的本征波函数，首先考虑 $y_+$，有
 
 $
-hat(H)_r (y_+) = 1/2 (R^2-R^(-2))+mat(sqrt(R^4-1), 1;1, sqrt(R^4-1))
+hat(H)_r (y_+) = 1/2 (R^2-R^(-2))+mat(sqrt(R^4-1), 1;1, -sqrt(R^4-1))
 $
 
-对应的本征波函数
+设 $y_plus.minus$对应的本征态为
 
 $
-
+ket(plus.minus)^((y)) = mat(plus.minus alpha; plus.minus beta)
 $
 
+则有
+
+$
+mat(plus.minus sqrt(R^4-1), 1;1, minus.plus sqrt(R^4-1)) mat(plus.minus alpha; plus.minus beta) =-R^2 mat(alpha_(plus.minus); beta_(plus.minus))
+$
+
+为 $y_+$，有
+
+$
+cases(sqrt(R^4-1) alpha_+ + beta_+ = -R^2 alpha_+,
+alpha_+ - sqrt(R^4-1) beta_+ = -R^2 beta_+)\
+=> \
+cases((R^4-1) alpha_+ + sqrt(R^4-1) beta_+ = -R^2 sqrt(R^4-1) alpha_+,
+alpha_+ - sqrt(R^4-1) beta_+ = -R^2 beta_+)\
+=> \
+R^4 alpha_+= -R^2 sqrt(R^4-1) alpha_+ - R^2 beta_+\
+=> \
+(R^2+sqrt(R^4-1)) alpha_+ = -beta_+\
+=> \
+beta_+ = -(R^2+sqrt(R^4-1)) alpha_+
+$
+
+为 $y_-$，有
+
+$
+cases(-sqrt(R^4-1) alpha_- + beta_- =- R^2 alpha_-,
+alpha_- + sqrt(R^4-1) beta_- =- R^2 beta_-)\
+=> \
+cases((R^4-1) alpha_- - sqrt(R^4-1) beta_- = R^2 sqrt(R^4-1) alpha_-,
+alpha_- +sqrt(R^4-1) beta_- = -R^2 beta_-)\
+=> \
+R^4 alpha_-= R^2 sqrt(R^4-1) alpha_- - R^2 beta_-\
+=> \
+(R^2-sqrt(R^4-1)) alpha_- = -beta_-\
+=> \
+beta_- = -(R^2-sqrt(R^4-1)) alpha_-
+$
+
+所以
+
+$
+beta_plus.minus = -(R^2plus.minus sqrt(R^4-1)) alpha_plus.minus
+$
+
+同时，为了满足归一化条件$alpha^2_(plus.minus)+beta^2_(plus.minus)=1$，有
+
+$
+(alpha_plus.minus)^2 + (beta_plus.minus)^2 = 1\
+alpha_plus.minus^2 + ((R^2-sqrt(R^4-1)) alpha_plus.minus)^2 = 1\
+alpha_plus.minus^2 + (R^4 plus.minus 2 R^2 sqrt(R^4-1) + R^4-1) alpha_plus.minus^2 = 1\
+(2 R^4 plus.minus 2 R^2 sqrt(R^4-1) ) alpha_plus.minus^2 = 1\
+alpha_plus.minus^2 = 1/(2 R^4 plus.minus 2 R^2 sqrt(R^4-1))\
+=>\
+beta^2_plus.minus = (R^2plus.minus sqrt(R^4-1))/(2 R^2  )\
+=>\
+mat(alpha_plus.minus; beta_plus.minus) = mat(1/(sqrt(2)R sqrt(R^2 plus.minus sqrt(R^4-1)));-  sqrt(R^2plus.minus sqrt(R^4-1))/(sqrt(2)R))
+$
+
+因此，基态波函数为
+$
+ket(G) &= sum_tau sum_i a_(tau i) ket(psi_tau^A)  ket(psi_i^B) = sum_i (a_(- i)ket(-) ket(psi_i^B) + a_(+ i)ket(+) ket(psi_i^B))\
+&= a_(- y_-) ket(-) ket(y_-) + a_(- y_+) ket(-) ket(y_+) + a_(+ y_-) ket(+) ket(y_-) + a_(+ y_+) ket(+) ket(y_+)\
+&= (psi (y-y_+))/sqrt(2) mat(alpha_+; beta_+) + (psi (y-y_-))/sqrt(2) mat(alpha_-; beta_-)\
+$<large_R_ground_state_wave_function>
+
+其中 $psi(y-y_+)$ 和 $psi(y-y_-)$ 是系统的基态局域波函数，且$a_(- y_-) = 1/sqrt(2) beta_- , a_(- y_+) = 1/sqrt(2) beta_+, a_(+ y_-) = 1/sqrt(2) alpha_- , a_(+ y_+) = 1/sqrt(2) alpha_+$。
 
 
+@large_R_ground_state_wave_function 可以得到量子本征微观态的关联矩阵为
+
+$
+C_(tau tau')^Q = sum_i a_(tau i)^* a_(tau' i)=a_(tau y_-) a_(tau' y_-)+a_(tau y_+) a_(tau' y_+)
+$
+
+写成矩阵形式为
+
+$
+C^Q &= mat(a_(- y_-)^2+a_(- y_+)^2, a_(- y_-)a_(+ y_-)+a_(- y_+)a_(+ y_+); a_(- y_-)a_(+ y_-)+a_(- y_+)a_(+ y_+),a_(+ y_-)^2+a_(+ y_+)^2)\
+&= 1/2 mat( alpha_-^2+beta_-^2, alpha_- beta_-+alpha_+ beta_+; alpha_- beta_-+alpha_+ beta_+, alpha_+^2+beta_+^2)\
+&=1/2 mat(1,-1/R^2;-1/R^2,1)
+$
+
+对应的本征值
+
+$
+lambda_(plus.minus) = 1/2(1 plus.minus 1/R^2)\
+$
+
+和本征态为
+
+$
+v_(plus.minus)= 1/sqrt(2) mat(1;plus.minus 1)\
+=> V =  1/sqrt(2) mat(1,1;1,-1)=mat(v_+,v_-)
+$
+
+可能的量子本征微观态为
+$
+E_k &= sum_(tau=0)^M V_(tau k) sum_(i=0)^N a_(tau i) ket(psi_i^B)\
+&= sum_(tau=0)^M (V_(tau k)  a_(tau y_-)  psi(y-y_-)+V_(tau k)  a_(tau y_+)  psi(y-y_+))\
+&= V_(- k)  a_(- y_-)  psi(y-y_-)+V_(- k)  a_(- y_+)  psi(y-y_+)+V_(+ k)  a_(+ y_-)  psi(y-y_-)+V_(+ k)  a_(+ y_+)  psi(y-y_+)\
+=> E_plus.minus&= 1/2 ( alpha_- psi(y-y_-) + alpha_+ psi(y-y_+) plus.minus beta_- psi(y-y_-) plus.minus beta_+ psi(y-y_+)  )
+$
 
 #pagebreak()
 
@@ -348,32 +489,104 @@ $
 $
 tilde(H)_n = 0\
 => sum_(j=0)^infinity 1/((2j+1)!) [H^0 + H^1, S]^((2j+1)) + sum_(j=0)^infinity 1/((2j)!) [H^2, S]^((2j)) = 0
-$
+$<non_diagonal_part_of_h>
 
-将 $S$ 展开为 $S = S^((1)) + S^((2)) + dots$，我们可以逐次逼近$S^((j))$到$S$： （怎么逼近的？）
+将 $S$ 展开为 $S = S^((1)) + S^((2)) + dots$，我们可以逐次逼近$S^((j))$到$S$：
 
-$
-[H^0 + H^1, S] + H^2 &=0\
-=> [H^0, S^((1))]  &= - H^2\
-=> [H^0, S^((2))]  &= - [H^1, S^((1))]\
-1/3! [H^0+H^1,S]^((3))+ 1/2! [H^2,S]^((2)) &= 0\
-=> [H^0, S^((3))]  &= - [H^1,S^((2))]-1/3 [[H^2,S^((1))],S^((1))],\
-dots.c &= dots.c
-$<the_progressive_expansion_of_s>
-
-@the_progressive_expansion_of_s 可以解得（怎么解的？）
+为了对应阶数，，同时方便计算，我们重新将哈密顿量写为
 
 $
-S^((1))_(m l)&=- H'_(m l)/(E_m-E_l),\
-S^((2))_(m l)&=- sum_k H'_(m k) S^((1))_(k l)/(E_m-E_l)\
-dots.c &= dots.c
+H = H_0 - lambda V
 $
+其中 $lambda$ 是一个小量, $H^0$ 是低阶对角的哈密顿量，$V$ 是非对角的哈密顿量。
+
+而 $S$ 也可以写为
+
+$
+S = lambda S^((1)) + lambda^2 S^((2)) + dots
+$
+
+根据 @non_diagonal_part_of_h，我们可以得到
+
+
+$
+[H_0,S]+lambda V - 1/2 lambda [[V,S],S] + dots.c = 0
+$
+
+将 $lambda$ 展开到 1 阶
+
+$
+[H_0,S^((1))] = V
+$
+
+将 $lambda$ 展开到 2 阶
+
+$
+[H_0,S^((2))] = 0
+$
+
+
+将 $lambda$ 展开到 3 阶
+
+$
+[H_0,S^((3))] - 1/2 [[V,S^((1))],S^((1))] + 1/3! [[[H_0,S^((1))],S^((1))],S^((1))] = 0\
+=> [H_0,S^((3))]= 1/3 [[V,S^((1))],S^((1))]
+$
+=== 求解 $S$ 的矩阵元
+
+对于 $S$ 的矩阵元 $S_(i j)$，我们可以通过逐次求解的方式得到。首先我们可以得到 $S_(i j)$ 的一阶解
+
+$
+braket(i, [H_0,S^((1))], j) &= braket(i, V, j)\
+braket(i, H_0 S^((1)), j)- braket(i, S^((1)) H_0, j) &= V_(i j)\
+E_i braket(i, S^((1)), j) - E_j braket(i, S^((1)), j) &= V_(i j)\
+S^((1))_(i j) &= V_(i j)/(E_i - E_j)
+$
+
+然后我们可以得到 $S_(i j)$ 的三阶解
+
+$
+braket(i, [H_0,S^((3))], j) &= 1/3 [[V,S^((1))],S^((1))]_(i j)\
+braket(i, H_0 S^((3)), j)- braket(i, S^((3)) H_0, j) &= 1/3 [[V,S^((1))],S^((1))]_(i j)\
+E_i braket(i, S^((3)), j) - E_j braket(i, S^((3)), j) &= 1/3 [[V,S^((1))],S^((1))]_(i j)\
+S^((3))_(i j) &= 1/3 [[V,S^((1))],S^((1))]_(i j)/(E_i - E_j)
+$
+
+以此类推，我们可以得到 $S_(i j)$ 的所有阶数的解。
+
+=== 计算 Rabi 模型的 $S^((1))$
+
+对于 Rabi 模型，哈密顿量写为
+
+$
+H = omega ap am + Omega/2 sx + g (ap + am) sz
+$
+
+计算前四个能级\ $ket(lr(-,0))$, $ket(lr(+,0))$, $ket(lr(-,1))$, $ket(lr(+,1))$，可以得到 $H_0=omega ap am + Omega/2 sx$ 的矩阵形式为
+
+$
+H_0 = mat(-Omega/2, 0, 0, 0; 0, Omega/2, 0, 0; 0, 0, omega-Omega/2, 0; 0, 0, 0, omega+Omega/2)
+$
+
+非对角部分 $g V= g (ap + am) sz$ 的矩阵形式为
+
+$
+V = mat(0, 0, 0, 1; 0, 0, 1, 0; 0, 1, 0, 0; 1, 0, 0, 0)
+$
+
+因此 $S^((1))$ 的矩阵形式为
+
+$
+S^((1))_(i j) &= V_(i j)/(E_i - E_j)\
+&= mat(0, 0, 0, -1/(omega+Omega); 0, 0, 1/(Omega-omega), 0; 0, 1/(omega-Omega), 0, 0; 1/(omega+Omega), 0, 0, 0)
+$
+
 
 === A systematic method for Schrieffer-Wolff transformation and its generalizations
 
 上文SW变换推导过于繁琐，经过查阅文献发现更加通用（但合理性待定）的方法，来自文献#cite(<haqSystematicMethodSchriefferWolff2020>).
 
-SW变换是一种幺正变换。因此，人们选择适当的幺正算子，它既可以使哈密顿完全对角化，又可以使哈密顿达到某种期望的阶。通常这种变换的一个要求是将非对角项取消到一阶，从而满足下面的条件。
+SW变换是一种幺正变换。因此，人们选择适当的幺正算子，它既可以使哈密顿完全对角化，又可以使哈密顿达到某种期望的阶。通常这种变换的一个要求是将非对角项消去到一阶，从而满足下面的条件。
 
 $
 [S,H_0]=-H_v
